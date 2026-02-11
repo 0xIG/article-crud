@@ -26,7 +26,8 @@ export class User {
     type: 'varchar',
     length: 255,
     nullable: false,
-    select: false, // Don't select password by default
+    // TODO: see database userGetByEmail
+    //select: false
   })
   hashPassword: string;
 
