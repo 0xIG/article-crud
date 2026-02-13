@@ -1,30 +1,9 @@
 # Article CRUD Application
+Test task by Grigory Ivanov
 
-A RESTful API for managing articles with user authentication, built with NestJS, TypeORM, and PostgreSQL. This application provides a complete backend solution for blog/article management with JWT-based authentication, role-based authorization, and comprehensive CRUD operations.
+## Description Below is AI Generated
 
-## Features
-
-- **User Authentication**: Sign up and sign in with JWT token-based authentication
-- **Article Management**: Full CRUD operations for articles (Create, Read, Update, Delete)
-- **Authorization**: Users can only edit/delete their own articles
-- **Pagination & Sorting**: List articles with pagination and customizable sorting
-- **Swagger Documentation**: Interactive API documentation at `/api` endpoint
-- **Database Migrations**: TypeORM migrations for database schema management
-- **Docker Support**: PostgreSQL database ready with Docker Compose
-- **Input Validation**: Comprehensive validation using class-validator decorators
-
-## Tech Stack
-
-- **Framework**: [NestJS](https://nestjs.com/) - A progressive Node.js framework
-- **Language**: TypeScript
-- **Database**: PostgreSQL with [TypeORM](https://typeorm.io/)
-- **Authentication**: JWT (JSON Web Tokens) with Passport.js
-- **Validation**: class-validator & class-transformer
-- **API Documentation**: Swagger/OpenAPI
-- **Containerization**: Docker & Docker Compose
-
-## Project Structure
-
+### Project structure
 ```
 src/
 ├── main.ts                  # Application entry point with Swagger setup
@@ -102,52 +81,6 @@ src/
    - API: http://localhost:3000
    - Swagger Documentation: http://localhost:3000/api
 
-### Without Docker
-
-1. Ensure PostgreSQL is running locally
-
-2. Create a database:
-   ```sql
-   CREATE DATABASE article;
-   ```
-
-3. Follow steps 3-7 from the Docker section above
-
-## Environment Variables
-
-Create a `.env` file in the root directory with the following variables:
-
-```env
-# JWT Configuration
-JWT_SECRET=your-super-secret-jwt-key-change-this-in-production
-
-# Database Configuration
-DB_HOST=localhost
-DB_PORT=5432
-DB_USERNAME=postgres
-DB_PASSWORD=postgres
-DB_DATABASE=article
-
-# Application Port (optional)
-PORT=3000
-```
-
-## Database Migrations
-
-The project uses TypeORM migrations for database schema management:
-
-- **Create new migration**: `npm run migration:create -- -n MigrationName`
-- **Run migrations**: `npm run migration:run`
-- **Sync schema** (development only): `npm run schema:sync`
-- **Drop schema**: `npm run schema:drop`
-
-## API Documentation
-
-Once the application is running, access the interactive Swagger UI at:
-```
-http://localhost:3000/api
-```
-
 ### Available Endpoints
 
 #### Authentication (`/auth`)
@@ -160,60 +93,6 @@ http://localhost:3000/api
 - `PATCH /article/:id` - Update an existing article (requires authentication, author only)
 - `DELETE /article/:id` - Delete an article (requires authentication, author only)
 - `GET /article/list` - List articles with pagination and sorting
-
-### Authentication
-
-Protected endpoints require a JWT token in the Authorization header:
-```
-Authorization: Bearer <your-jwt-token>
-```
-
-## API Usage Examples
-
-### 1. User Registration
-```bash
-curl -X POST http://localhost:3000/auth/signup \
-  -H "Content-Type: application/json" \
-  -d '{
-    "email": "user@example.com",
-    "password": "securePassword123",
-    "name": "John Doe"
-  }'
-```
-
-### 2. User Login
-```bash
-curl -X GET http://localhost:3000/auth/signin \
-  -H "Content-Type: application/json" \
-  -d '{
-    "email": "user@example.com",
-    "password": "securePassword123"
-  }'
-```
-
-**Note**: The signin endpoint uses `GET` method with a request body. For production, consider changing this to `POST`.
-
-### 3. Create Article (Authenticated)
-```bash
-curl -X POST http://localhost:3000/article \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer <your-jwt-token>" \
-  -d '{
-    "title": "Introduction to NestJS",
-    "description": "A comprehensive guide to building REST APIs with NestJS",
-    "content": "# Introduction\nNestJS is a progressive Node.js framework..."
-  }'
-```
-
-### 4. List Articles with Pagination
-```bash
-curl "http://localhost:3000/article/list?pageIndex=1&pageSize=10"
-```
-
-### 5. List Articles with Sorting
-```bash
-curl "http://localhost:3000/article/list?pageIndex=1&pageSize=10&sort[createdAt]=DESC"
-```
 
 ## Development
 
@@ -284,31 +163,6 @@ npm run test:cov
 5. **CORS**: Configured through NestJS (adjust for production)
 6. **Sensitive Data**: Passwords excluded from API responses
 
-## Notes and Limitations
-
-1. The signin endpoint uses `GET` method with a request body. This is unconventional for REST APIs and may cause issues with some HTTP clients or proxies. Consider changing to `POST` for production use.
-2. Error messages are returned in plain text format.
-3. No email verification for user registration.
-4. No password reset functionality.
-5. No rate limiting implemented.
-6. No refresh token mechanism - JWT tokens expire after 6 hours.
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch: `git checkout -b feature/amazing-feature`
-3. Commit changes: `git commit -m 'Add amazing feature'`
-4. Push to branch: `git push origin feature/amazing-feature`
-5. Open a Pull Request
-
-## License
-
-UNLICENSED - See the [LICENSE](LICENSE) file for details.
-
 ## Author
 
 Grigory Ivanov
-
-## Support
-
-For issues, questions, or contributions, please open an issue in the GitHub repository.

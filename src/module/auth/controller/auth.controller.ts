@@ -2,7 +2,6 @@ import {
   BadRequestException,
   Body,
   Controller,
-  Get,
   Post,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -43,7 +42,7 @@ export class AuthController {
    * @param params - User credentials (email and password)
    * @returns JWT access token for authenticated requests
    */
-  @Get(AUTH_SIGNIN_ROUTE_PREFIX)
+  @Post(AUTH_SIGNIN_ROUTE_PREFIX)
   @ApiOperation({ summary: 'Sign in user and get JWT token' })
   @ApiResponse({ status: 200, description: 'User authenticated successfully' })
   @ApiResponse({
