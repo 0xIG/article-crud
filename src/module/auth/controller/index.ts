@@ -1,2 +1,1 @@
-export * from './signin.controller';
-export * from './signup.controller';
+export * from './auth.controller';

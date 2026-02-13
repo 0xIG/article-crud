@@ -1,10 +1,10 @@
 import {
   Column,
-  Entity,
-  PrimaryGeneratedColumn,
   CreateDateColumn,
-  UpdateDateColumn,
+  Entity,
   Index,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 @Entity('user')
@@ -18,7 +18,7 @@ export class User {
     length: 100,
     nullable: false,
   })
-  @Index()
+  @Index('idx_user_email')
   email: string;
 
   @Column({
@@ -44,6 +44,7 @@ export class User {
     precision: 6,
     default: () => 'CURRENT_TIMESTAMP(6)',
   })
+  @Index('idx_user_created_at')
   createdAt: Date;
 
   @UpdateDateColumn({

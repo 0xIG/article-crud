@@ -1,24 +1,43 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { dataSourceOptions } from './database/datasource';
 import { AuthModule } from './module/auth';
-import { DatabaseModule } from './module/database';
 import { UserModule } from './module/user';
-import { JwtModule } from '@nestjs/jwt';
+import { JwtModule, JwtModuleOptions } from '@nestjs/jwt';
+import { ArticleModule } from './module/article';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
-    JwtModule.register({
-      global: true,
-      secret: process.env.JWT_SECRET,
-      signOptions: { expiresIn: '6h' },
+    ConfigModule.forRoot({ isGlobal: true }),
+    JwtModule.registerAsync({
+      inject: [ConfigService],
+      useFactory: (config: ConfigService): JwtModuleOptions => ({
+        secret: config.getOrThrow<string>('JWT_SECRET'),
+        signOptions: {
+          expiresIn: '6h',
+        },
+        global: true,
+      }),
     }),
-    TypeOrmModule.forRoot(dataSourceOptions),
+    TypeOrmModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: (config: ConfigService): TypeOrmModuleOptions => ({
+        type: 'postgres',
+        host: config.get<string>('DB_HOST', 'localhost'),
+        port: config.get<number>('DB_PORT', 5432),
+        username: config.get<string>('DB_USERNAME'),
+        password: config.get<string>('DB_PASSWORD'),
+        database: config.get<string>('DB_DATABASE'),
+        synchronize: false,
+        entities: [__dirname + '/**/*.entity{.js,.ts}'],
+        migrations: [__dirname + '/migrations/**/*{.js,.ts}'],
+        migrationsRun: false,
+        retryAttempts: 10,
+      }),
+    }),
     AuthModule,
-    DatabaseModule,
     UserModule,
+    ArticleModule,
   ],
   controllers: [],
   providers: [],
