@@ -7,11 +7,17 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
+/**
+ * User entity representing application users
+ * Maps to the 'user' table in the database
+ */
 @Entity('user')
 export class User {
+  /** Primary key, auto-incremented integer */
   @PrimaryGeneratedColumn('increment', { type: 'int' })
   id: number;
 
+  /** User email address, must be unique */
   @Column({
     type: 'varchar',
     unique: true,
@@ -21,16 +27,17 @@ export class User {
   @Index('idx_user_email')
   email: string;
 
+  /** Hashed password for authentication */
   @Column({
     name: 'hash_password',
     type: 'varchar',
     length: 255,
     nullable: false,
-    // TODO: see database userGetByEmail
-    //select: false
+    select: false,
   })
   hashPassword: string;
 
+  /** User's full name */
   @Column({
     type: 'varchar',
     length: 100,
@@ -38,6 +45,7 @@ export class User {
   })
   name: string;
 
+  /** Timestamp when the user account was created */
   @CreateDateColumn({
     name: 'created_at',
     type: 'timestamptz',
@@ -47,6 +55,7 @@ export class User {
   @Index('idx_user_created_at')
   createdAt: Date;
 
+  /** Timestamp when the user account was last updated */
   @UpdateDateColumn({
     name: 'updated_at',
     type: 'timestamptz',

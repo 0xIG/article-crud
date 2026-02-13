@@ -9,11 +9,17 @@ import {
 } from 'typeorm';
 import { User } from '../../user';
 
+/**
+ * Article entity representing blog articles in the system
+ * Maps to the 'article' table in the database
+ */
 @Entity('article')
 export class Article {
+  /** Primary key, auto-incremented integer */
   @PrimaryGeneratedColumn('increment', { type: 'int' })
   id: number;
 
+  /** Article title, must be unique */
   @Column({
     name: 'title',
     type: 'varchar',
@@ -23,6 +29,7 @@ export class Article {
   })
   title: string;
 
+  /** Short description/summary of the article */
   @Column({
     name: 'description',
     type: 'varchar',
@@ -31,13 +38,16 @@ export class Article {
   })
   description: string;
 
+  /** Full content of the article in text format */
   @Column({ name: 'content', type: 'text', nullable: false })
   content: string;
 
+  /** Author of the article (foreign key to User entity) */
   @ManyToOne(() => User)
   @JoinColumn({ name: 'author_id' })
   author: User;
 
+  /** Timestamp when the article was created */
   @CreateDateColumn({
     name: 'created_at',
     type: 'timestamptz',
@@ -46,6 +56,7 @@ export class Article {
   })
   createdAt: Date;
 
+  /** Timestamp when the article was last updated */
   @UpdateDateColumn({
     name: 'updated_at',
     type: 'timestamptz',
