@@ -5,12 +5,10 @@ import { ApiProperty } from '@nestjs/swagger';
 /**
  * JWT payload structure used for authentication tokens
  */
-export type Payload = {
+export interface IPayload {
   /** Subject (user ID) */
   sub: number;
-  /** User's email address */
-  email: string;
-};
+}
 
 /**
  * DTO for user sign-in/authentication

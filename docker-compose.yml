@@ -1,6 +1,6 @@
 services:
   article-crud-db:
-    image: postgres:15-alpine
+    image: postgres:18-alpine
     container_name: article-crud-db
     ports:
       - '5432:5432'
@@ -8,3 +8,37 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: article
+    volumes:
+      - /var/lib/postgresql
+  pgweb:
+    container_name: pgweb
+    restart: always
+    image: sosedoff/pgweb
+    ports:
+      - "8081:8081"
+    links:
+      - article-crud-db:article-crud-db
+    environment:
+      - PGWEB_DATABASE_URL=postgres://postgres:postgres@article-crud-db:5432/article?sslmode=disable
+    depends_on:
+      - article-crud-db
+  redis:
+    image: redis:8.6.0-alpine
+    restart: always
+    ports:
+      - "6379:6379"
+    environment:
+      REDIS_PASSWORD: redis
+    volumes:
+      - cache:/data
+  redis-insight:
+    image: redis/redisinsight:latest
+    restart: always
+    ports:
+      - "5540:5540"
+    volumes:
+      - redis-insight:/data
+volumes:
+  redis-insight:
+  cache:
+    driver: local

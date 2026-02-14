@@ -12,7 +12,7 @@ import {
   AUTH_SIGNUP_ROUTE_PREFIX,
 } from '../../../route';
 import {
-  Payload,
+  IPayload,
   SigninDto,
   SigninDtoResponse,
   SignupDto,
@@ -59,7 +59,7 @@ export class AuthController {
       throw new UnauthorizedException('Invalid password');
     }
 
-    const payload: Payload = { sub: user.id, email };
+    const payload: IPayload = { sub: user.id };
     return {
       access_token: await this.jwtService.signAsync(payload, {
         secret: this.configService.getOrThrow<string>('JWT_SECRET'),

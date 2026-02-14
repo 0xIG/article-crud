@@ -5,6 +5,7 @@ import {
   Delete,
   ForbiddenException,
   Get,
+  Inject,
   NotFoundException,
   Param,
   ParseIntPipe,
@@ -14,10 +15,10 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import {
-  ApiTags,
+  ApiBearerAuth,
   ApiOperation,
   ApiResponse,
-  ApiBearerAuth,
+  ApiTags,
 } from '@nestjs/swagger';
 import {
   ARTICLE_LIST_ROUTE_PREFIX,
@@ -36,6 +37,7 @@ import {
 } from '../dto';
 import { JwtAuthGuard, UserIdGet } from '../../auth';
 import { UserService } from '../../user';
+import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager';
 
 /**
  * Controller for managing articles
@@ -47,6 +49,7 @@ export class ArticleController {
   constructor(
     private userService: UserService,
     private articleService: ArticleService,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 
   /**
@@ -54,7 +57,7 @@ export class ArticleController {
    * @param articleId - ID of the article to retrieve
    * @returns Article entity with author details
    */
-  @Get(':id')
+  @Get('/:id')
   @ApiOperation({ summary: 'Get article by ID' })
   @ApiResponse({ status: 200, description: 'Article retrieved successfully' })
   @ApiResponse({ status: 404, description: 'Article not found' })
@@ -118,7 +121,7 @@ export class ArticleController {
    * @param authorId - ID of the authenticated user (extracted from JWT token)
    * @returns Updated article
    */
-  @Patch(':id')
+  @Patch('/:id')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Update an existing article' })
@@ -138,9 +141,10 @@ export class ArticleController {
     if (!article) {
       throw new NotFoundException('Article not found');
     }
-    if (article.author.id !== authorId) {
+    if (article.author.id != authorId) {
       throw new BadRequestException('Only author can edit article');
     }
+    await this.cacheManager.del(`${ARTICLE_ROUTE_PREFIX}/:${articleId}`);
     return await this.articleService.articleEdit(articleId, params);
   }
 
@@ -176,6 +180,7 @@ export class ArticleController {
     if (article.author.id !== authorId) {
       throw new ForbiddenException('Only author can delete article');
     }
+    await this.cacheManager.del(`${ARTICLE_ROUTE_PREFIX}/:${articleId}`);
     await this.articleService.articleDelete(articleId);
     return { articleId: articleId, success: true };
   }
