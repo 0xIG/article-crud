@@ -95,7 +95,7 @@ export enum SORT {
 /**
  * Type for sorting articles by any field with direction
  */
-export type ArticleSort = { [P in keyof Article]: SORT };
+export type ArticleSort = Partial<{ [P in keyof Article]: SORT }>;
 
 /**
  * DTO for listing articles with pagination and sorting
@@ -124,7 +124,8 @@ export class ArticleListDto {
 
   @IsOptional()
   @ApiPropertyOptional({
-    description: 'Sorting criteria for articles',
+    description:
+      'Sorting criteria for articles. Specify field name with direction (ASC or DESC).',
     example: { createdAt: 'DESC' },
     type: 'object',
     additionalProperties: {
