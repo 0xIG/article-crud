@@ -1,5 +1,6 @@
-# Article CRUD Application
-Test task by Grigory Ivanov
+# Article CRUD Test Application - Grigory Ivanov
+
+## Documentation, comments, and tests are made with a help of AI
 
 ## Description
 
