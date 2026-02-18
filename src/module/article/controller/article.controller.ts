@@ -144,7 +144,7 @@ export class ArticleController {
     if (article.author.id != authorId) {
       throw new BadRequestException('Only author can edit article');
     }
-    await this.cacheManager.del(`${ARTICLE_ROUTE_PREFIX}/:${articleId}`);
+    await this.cacheManager.del(`${ARTICLE_ROUTE_PREFIX}/${articleId}`);
     return await this.articleService.articleEdit(articleId, params);
   }
 
@@ -180,7 +180,7 @@ export class ArticleController {
     if (article.author.id !== authorId) {
       throw new ForbiddenException('Only author can delete article');
     }
-    await this.cacheManager.del(`${ARTICLE_ROUTE_PREFIX}/:${articleId}`);
+    await this.cacheManager.del(`${ARTICLE_ROUTE_PREFIX}/${articleId}`);
     await this.articleService.articleDelete(articleId);
     return { articleId: articleId, success: true };
   }
